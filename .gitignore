@@ -1,0 +1,13 @@
+# Credentials
+main/secrets.h
+
+# Editor and build files
+.vscode/
+build/
+*.elf
+*.bin
+*.hex
+
+# Operating system files
+.DS_Store
+Thumbs.db
