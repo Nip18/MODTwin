@@ -1,136 +1,174 @@
-MODTwin: IoT-Based Machine Health Monitoring
+# MODTwin — Modular IoT-Based Digital Twin for Machine Health Monitoring
+
+**An ESP32-based prototype for monitoring machine operating conditions, assessing health, and communicating system status through an IoT dashboard.**
+
+MODTwin explores how low-cost embedded systems and IoT technologies can be used to monitor rotating machinery, identify abnormal operating conditions, and support condition-based maintenance.
+
+The project combines sensor data acquisition, rule-based health assessment, status indication, and cloud-based data visualization in a modular architecture designed for future expansion.
+
+## Project Overview
+
+Rotating machinery can experience faults due to excessive temperature, vibration, or abnormal operating speeds. Monitoring these parameters can help identify potentially unhealthy operating conditions before they lead to equipment failure.
+
+MODTwin is being developed as a modular platform that connects physical or simulated machine parameters to an embedded monitoring system and a cloud dashboard.
+
+The current prototype focuses on establishing the core monitoring pipeline before progressing towards real-time sensor integration and predictive maintenance.
+
+## System Architecture
+
+```text
+Machine Parameters
+       |
+       v
+Sensor Inputs / Simulated Data
+       |
+       v
+ESP32 Data Acquisition
+       |
+       v
+Rule-Based Health Assessment
+       |
+       v
+Health Score + Operating Status
+       |
+       +------> LED / Buzzer Alerts
+       |
+       v
+Wi-Fi Communication
+       |
+       v
+ThingSpeak IoT Dashboard
+```
 
-MODTwin is an ESP32-based prototype for monitoring machine operating conditions using sensor acquisition, rule-based health assessment, alerts, and cloud-based visualisation.
+## Key Features
 
-The project explores how low-cost embedded hardware and IoT connectivity can be used to build a foundation for condition monitoring and digital-twin systems.
+- **Embedded monitoring:** ESP32-based data acquisition and processing.
+- **Operating parameter tracking:** Temperature, rotational speed (RPM), and vibration-related values.
+- **Rule-based health assessment:** Calculates a health score and assigns an operating status based on implemented thresholds.
+- **Local alerts:** LED and buzzer outputs for status indication.
+- **IoT integration:** Designed to transmit monitoring data to ThingSpeak over Wi-Fi.
+- **Modular development:** Structured for future integration of additional sensors and more advanced health-assessment methods.
 
-Project Status
+## Hardware and Technologies
 
-Current stage: Working prototype with simulated RPM and vibration inputs.
+| Component / Technology | Purpose |
+|---|---|
+| ESP32 development board | Embedded processing and Wi-Fi connectivity |
+| DHT11 temperature sensor | Temperature input |
+| Potentiometer | Simulated RPM input |
+| MPU6050 accelerometer/gyroscope | Planned or experimental vibration measurement |
+| LEDs and buzzer | Local status indication |
+| ThingSpeak | Cloud data visualization |
+| Arduino IDE / C++ | Firmware development |
 
-The current implementation reads temperature from a DHT11, generates RPM and vibration inputs for testing, calculates a basic health score, activates LED and buzzer alerts, and sends data to ThingSpeak.
+*Hardware integration and validation may vary between prototype iterations. See the implementation status below.*
 
-Real shaft-speed measurement and reliable accelerometer-based vibration acquisition remain future improvements.
+## Current Implementation Status
 
-System Architecture
+| Subsystem | Status |
+|---|---|
+| ESP32 firmware compilation and upload | Working |
+| Temperature monitoring | Implemented; physical sensor readings require validation |
+| RPM input | Simulated through a potentiometer |
+| Vibration monitoring | Simulated in the current tested firmware; real sensor integration remains unfinished |
+| Rule-based health score and status | Implemented |
+| LED / buzzer alerts | Implemented in firmware; physical operation requires validation |
+| Wi-Fi connectivity | Troubleshooting in progress |
+| ThingSpeak data transmission | Integration implemented; successful live transmission remains to be verified |
+| Predictive maintenance using machine learning | Future development |
 
-Sensors and test inputs → ESP32 → Health assessment → Status classification → LED/buzzer alerts → ThingSpeak dashboard
+**Important:** This is a work in progress. Simulated values and firmware-level features are not equivalent to validated measurements from a running machine. The project does not yet claim a fully validated digital twin or predictive-maintenance system.
 
-Hardware
+## Repository Structure
 
-ESP32 development board
+```text
+MODTwin/
+├── main/
+│   ├── main.ino
+│   └── secrets.example.h
+├── docs/
+│   ├── hardware-setup.jpg
+│   ├── serial-monitor.png
+│   ├── thingspeak-dashboard.png
+│   └── wiring-diagram.png
+├── .gitignore
+└── README.md
+```
 
-DHT11 temperature and humidity sensor
+Only files that exist in the repository should appear in this structure. The actual `main/secrets.h` file containing credentials is intentionally excluded from version control.
 
-Potentiometer for simulated RPM input
+## Getting Started
 
-RGB LED
+### 1. Requirements
 
-Buzzer
+- ESP32 development board
+- Arduino IDE with the ESP32 board package installed
+- Required libraries used by the firmware, including the DHT and ThingSpeak libraries
+- Wi-Fi network supported by the ESP32 (2.4 GHz)
+- ThingSpeak account and channel for cloud integration
 
-MPU6050 accelerometer/gyroscope module (integration incomplete)
+### 2. Configure Credentials
 
-Breadboard, jumper wires, and USB power/programming connection
+Navigate to the `main` folder and create a copy of `secrets.example.h` named `secrets.h`.
 
-Software and Libraries
+Add your own Wi-Fi credentials and ThingSpeak Write API Key to the local file. Do not commit this file to GitHub.
 
-Arduino C/C++
+### 3. Upload the Firmware
 
-ESP32 Arduino framework
+1. Open `main/main.ino` in Arduino IDE.
+2. Select the correct ESP32 board and serial port.
+3. Install any required libraries if prompted.
+4. Compile and upload the sketch.
+5. Open Serial Monitor at the baud rate configured in the firmware, typically `115200`.
 
-DHT sensor library
+### 4. Verify Operation
 
-Adafruit MPU6050 and Adafruit Unified Sensor libraries
+- Check whether the ESP32 connects to Wi-Fi.
+- Inspect the serial output for sensor values, health score, and operating status.
+- Confirm that new measurements reach the configured ThingSpeak channel.
+- Validate sensor readings against known conditions before relying on them.
 
-ThingSpeak Arduino library
+## Cloud Dashboard
 
-Wi-Fi connectivity
+ThingSpeak is intended to display the monitored parameters over time, enabling visual inspection of operating conditions and health status.
 
-Current Features
+Add a screenshot of your dashboard here once live data transmission has been verified:
 
-Temperature acquisition using the DHT11
+`docs/thingspeak-dashboard.png`
 
-Simulated RPM input using a potentiometer
+## Engineering Approach
 
-Simulated vibration values for testing
+The project is being developed incrementally:
 
-Rule-based health score calculation
+1. Establish embedded data acquisition and firmware execution.
+2. Implement health assessment and local status indication.
+3. Integrate reliable Wi-Fi communication and cloud visualization.
+4. Replace simulated inputs with validated physical sensor measurements.
+5. Improve health assessment using historical data and anomaly-detection methods.
+6. Explore a more complete digital-twin workflow for rotating machinery.
 
-Four operating states: HEALTHY, WARNING, CRITICAL, and SHUTDOWN
+## Future Development
 
-RGB LED and buzzer status indication
+- Reliable MPU6050 integration and vibration-feature extraction.
+- Real RPM measurement using an appropriate speed sensor or encoder.
+- Improved sensor validation and fault handling.
+- Robust Wi-Fi reconnection and cloud-upload error handling.
+- Historical trend analysis and anomaly detection.
+- Machine-learning-based predictive-maintenance experiments.
+- A more complete digital-twin representation linking physical machine behaviour with its digital model.
 
-Periodic data transmission to ThingSpeak
+## Project Goal
 
-Serial Monitor output for debugging
+MODTwin aims to evolve from a low-cost IoT monitoring prototype into a modular platform for machine-condition monitoring and digital-twin experimentation.
 
-Health Assessment
+The emphasis is on building the system incrementally, validating each subsystem, and documenting the engineering decisions and limitations along the way.
 
-The current health score begins at 100 and applies penalties based on temperature and RPM thresholds.
+---
 
-The vibration penalty is currently disabled because the accelerometer integration has not been validated. The health score is a prototype rule-based indicator, not a validated industrial health or failure prediction model.
+**Project status:** Prototype under development  
+**Domain:** Industrial IoT · Embedded Systems · Machine Condition Monitoring · Digital Twins
 
-Repository Structure
 
-main.ino — ESP32 firmware
-
-secrets.example.h — Template for local Wi-Fi and API credentials
-
-docs/ — Wiring diagrams, project photographs, and dashboard screenshots
-
-The private secrets.h file is intentionally excluded from version control.
-
-Setup
-
-Install the ESP32 board package in Arduino IDE.
-
-Install the required libraries listed above.
-
-Copy secrets.example.h to secrets.h.
-
-Enter your local Wi-Fi credentials and ThingSpeak write API key in secrets.h.
-
-Open main.ino in Arduino IDE and select the appropriate ESP32 board and port.
-
-Compile and upload the firmware.
-
-Open Serial Monitor at 115200 baud.
-
-Configure the ThingSpeak channel with numeric fields for temperature, RPM, health score, status code, and vibration.
-
-Keep secrets.h private. Never publish Wi-Fi passwords or write API keys.
-
-Current Limitations
-
-RPM is simulated rather than measured from a rotating shaft.
-
-Vibration is generated in software rather than measured from the MPU6050.
-
-The MPU6050 integration is incomplete and has not been validated.
-
-The health score uses basic thresholds and has not been validated against real machine faults.
-
-The temperature fallback and sensor-error handling require improvement.
-
-Dashboard status codes require a documented numeric mapping.
-
-Planned Improvements
-
-Integrate reliable accelerometer-based vibration measurement.
-
-Measure actual motor RPM using a suitable sensor.
-
-Improve sensor fault detection and health-score logic.
-
-Add MQTT-based telemetry and a clearer dashboard.
-
-Connect monitoring to a physical motor test platform.
-
-Validate the system using repeatable experiments and recorded results.
-
-Safety and Scope
-
-MODTwin is an educational prototype. It is not certified for industrial safety, predictive maintenance decisions, or autonomous protection of production machinery.
 
 ## Project Evidence
 
