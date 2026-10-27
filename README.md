@@ -1,4 +1,4 @@
-# MODTwin — Modular IoT-Based Digital Twin for Machine Health Monitoring
+# MODTwin - Modular IoT-Based Digital Twin for Machine Health Monitoring
 
 **An ESP32-based prototype for monitoring machine operating conditions, assessing health, and communicating system status through an IoT dashboard.**
 
